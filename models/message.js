@@ -4,11 +4,13 @@ const mongoosePaginate = require('mongoose-paginate')
 const MessageSchema = new mongoose.Schema({
     text: String,
     hash: String,
-    user: {type: String, required: false},
-    popular: {type: Number, required: false},
-    updated: {type: Number, required: false},
+    user: String,
+    popular: Number,
+    updated: Number,
     created: Number,
-    posted: {type: Number, required: false}
+    posted: Number,
+    comments: Number,
+    tags: Array
 })
 MessageSchema.plugin(mongoosePaginate)
 const Message = mongoose.model('Message', MessageSchema)
