@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const userRoutes = require('./routes/user.js')
 const messageRoutes = require('./routes/message.js')
 const commentRoutes = require('./routes/comment.js')
+const cors = require('cors')
 
 const app = express()
 mongoose.connect('mongodb://localhost/hash', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true}, error => {
@@ -14,6 +15,7 @@ mongoose.connect('mongodb://localhost/hash', {useNewUrlParser: true, useUnifiedT
     }
 });
 
+app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 

@@ -82,43 +82,55 @@ router.get('/id/:id', (req, res) => {
 // router.get('/message/address/:address', (req, res) => {})
 
 router.get('/following/:address/:page/:limit', (req, res) => {
-    User.findOne({address: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')}, (userError, userData) => {
-        if(userError){
-            return res.status(500).json('error')
-        } else if(!userData){
-            return res.status(400).json('error')
-        } else if(userData){
-            Message.paginate({address: {$in: userData.following}}, {page, limit}, (messageError, messageData) => {
-                if(messageError){
-                    return res.status(500).json('error')
-                } else if(!messageData){
-                    return res.status(400).json('error')
-                } else if(messageData){
-                    return res.status(200).json(messageData)
-                }
-            })
-        }
-    })
+    let page = Number(req.params.page)
+    let limit = Number(req.params.limit)
+    if(isNaN(page) || isNaN(limit)){
+        return res.status(400).json('error')
+    } else {
+        User.findOne({address: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')}, (userError, userData) => {
+            if(userError){
+                return res.status(500).json('error')
+            } else if(!userData){
+                return res.status(400).json('error')
+            } else if(userData){
+                Message.paginate({address: {$in: userData.following}}, {page, limit}, (messageError, messageData) => {
+                    if(messageError){
+                        return res.status(500).json('error')
+                    } else if(!messageData){
+                        return res.status(400).json('error')
+                    } else if(messageData){
+                        return res.status(200).json(messageData)
+                    }
+                })
+            }
+        })
+    }
 })
 
 router.get('/followers/:address/:page/:limit', (req, res) => {
-    User.findOne({address: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')}, (userError, userData) => {
-        if(userError){
-            return res.status(500).json('error')
-        } else if(!userData){
-            return res.status(400).json('error')
-        } else if(userData){
-            Message.paginate({address: {$in: userData.followers}}, {page, limit}, (messageError, messageData) => {
-                if(messageError){
-                    return res.status(500).json('error')
-                } else if(!messageData){
-                    return res.status(400).json('error')
-                } else if(messageData){
-                    return res.status(200).json(messageData)
-                }
-            })
-        }
-    })
+    let page = Number(req.params.page)
+    let limit = Number(req.params.limit)
+    if(isNaN(page) || isNaN(limit)){
+        return res.status(400).json('error')
+    } else {
+        User.findOne({address: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')}, (userError, userData) => {
+            if(userError){
+                return res.status(500).json('error')
+            } else if(!userData){
+                return res.status(400).json('error')
+            } else if(userData){
+                Message.paginate({address: {$in: userData.followers}}, {page, limit}, (messageError, messageData) => {
+                    if(messageError){
+                        return res.status(500).json('error')
+                    } else if(!messageData){
+                        return res.status(400).json('error')
+                    } else if(messageData){
+                        return res.status(200).json(messageData)
+                    }
+                })
+            }
+        })
+    }
 })
 
 router.post('/follow', (req, res) => {

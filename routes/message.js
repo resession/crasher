@@ -30,7 +30,7 @@ router.get('/id/:id', (req, res) => {
 })
 
 router.post('/submit', (req, res) => {
-    if(!req.body.key || !req.body.text || typeof(req.body.text) !== 'string' || typeof(req.body.key) !== 'string'){
+    if(!req.body.key || !req.body.text || typeof(req.body.text) !== 'string' || typeof(req.body.key) !== 'string' || req.body.text.length > 300){
         return res.status(400).json('error')
     } else {
         Message.findOne({hash: MD5(req.body.text)}, (foundError, found) => {
