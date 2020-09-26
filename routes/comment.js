@@ -23,7 +23,7 @@ router.get('/message/:message/:page/:limit', (req, res) => {
     if(isNaN(page) || isNaN(limit)){
         return res.status(400).json('error')
     } else {
-        Comment.paginate({message: req.params.message}, {page, limit}, (error, data) => {
+        Comment.paginate({message: req.params.message}, {page, limit, sort: {created: -1}}, (error, data) => {
             if(error){
                 console.log(error)
                 return res.status(500).json('error')
@@ -42,7 +42,7 @@ router.get('/id/:id/:page/:limit', (req, res) => {
     if(isNaN(page) || isNaN(limit)){
         return res.status(400).json('error')
     } else {
-        Comment.paginate({_id: req.params.id}, {page, limit}, (error, data) => {
+        Comment.paginate({_id: req.params.id}, {page, limit, sort: {created: -1}}, (error, data) => {
             if(error){
                 console.log(error)
                 return res.status(500).json('error')
@@ -56,14 +56,15 @@ router.get('/id/:id/:page/:limit', (req, res) => {
 })
 
 router.post('/text', (req, res) => {
-    if(!req.body.key || !req.body.text || !req.body.message || typeof(req.body.message) !== 'string' || typeof(req.body.text) !== 'string' || typeof(req.body.key) !== 'string' || req.body.text.length > 600){
+    if(!req.body.text || !req.body.message || typeof(req.body.message) !== 'string' || typeof(req.body.text) !== 'string' || req.body.text.length > 600){
         return res.status(400).json('error')
     } else {
         Message.findOne({hash: req.body.message}, (messageError, messageData) => {
             if(messageError){
                 return res.status(500).json('error')
             } else if(messageData){
-                Comment.create({user: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex'), message: req.body.message, text: req.body.text, created: Date.now()}, (commentError, commentData) => {
+                let user = !req.body.key || typeof(req.body.key) !== 'string' ? 'anon' : new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')
+                Comment.create({user, message: req.body.message, text: req.body.text, created: Date.now()}, (commentError, commentData) => {
                     if(commentError){
                         console.log(commentError)
                         return res.status(500).json('error')
@@ -88,7 +89,7 @@ router.get('/newest/:page/:limit', (req, res) => {
     if(isNaN(page) || isNaN(limit)){
         return res.status(400).json('error')
     } else {
-        Comment.paginate({}, {page, limit}, (error, data) => {
+        Comment.paginate({}, {page, limit, sort: {created: -1}}, (error, data) => {
             if(error){
                 console.log(error)
                 return res.status(500).json('error')
