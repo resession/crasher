@@ -41,6 +41,6 @@ app.get('*', (req, res) => {
 //     console.log('listening')
 // })
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, process.env.HOST, () => {
     console.log('listening')
 })
