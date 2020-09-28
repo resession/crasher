@@ -40,6 +40,6 @@ app.get('*', (req, res) => {
 //     console.log('listening')
 // })
 
-app.listen(process.env.PORT, process.env.HOST, () => {
+app.listen(process.env.PORT, () => {
     console.log('listening')
 })
