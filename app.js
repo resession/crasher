@@ -18,6 +18,7 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: tru
     }
 });
 
+app.set('trust proxy')
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
