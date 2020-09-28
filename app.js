@@ -18,7 +18,7 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: tru
     }
 });
 
-app.set('trust proxy')
+// app.set('trust proxy')
 app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -41,6 +41,6 @@ app.get('*', (req, res) => {
 //     console.log('listening')
 // })
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, process.env.HOST, () => {
     console.log('listening')
 })
