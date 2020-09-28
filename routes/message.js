@@ -35,6 +35,7 @@ router.post('/submit', (req, res) => {
     } else {
         Message.findOne({hash: MD5(req.body.text)}, (foundError, found) => {
             if(foundError){
+                console.log(foundError)
                 return res.status(500).json('error')
             } else if(found){
                 found.popular = Date.now() - found.updated
@@ -47,6 +48,7 @@ router.post('/submit', (req, res) => {
                 let tags = !req.body.tags || typeof(req.body.tags) !== 'string' || req.body.tags.length > 100 ? [] : req.body.tags.split(',')
                 Message.create({tags, updated: Date.now(), popular: Date.now(), posted: 0, comments: 0, user, text: req.body.text, hash: MD5(req.body.text), created: Date.now()}, (createdError, created) => {
                     if(createdError){
+                        console.log(createdError)
                         return res.status(500).json('error')
                     } else if(created){
                         return res.status(200).json(created)
@@ -68,6 +70,7 @@ router.get('/updated/:page/:limit', (req, res) => {
     } else {
         Message.paginate({}, {page, limit, sort: {updated: -1}}, (error, data) => {
             if(error){
+                console.log(error)
                 return res.status(500).json('error')
             } else if(data){
                 return res.status(200).json(data)
@@ -87,6 +90,7 @@ router.get('/newest/:page/:limit', (req, res) => {
     } else {
         Message.paginate({}, {page, limit, sort: {created: -1}}, (error, data) => {
             if(error){
+                console.log(error)
                 return res.status(500).json('error')
             } else if(data){
                 return res.status(200).json(data)
@@ -106,6 +110,7 @@ router.get('/popular/:page/:limit', (req, res) => {
     } else {
         Message.paginate({}, {page, limit, sort: {popular: 1}}, (error, data) => {
             if(error){
+                console.log(error)
                 return res.status(500).json('error')
             } else if(data){
                 return res.status(200).json(data)

@@ -61,6 +61,7 @@ router.post('/text', (req, res) => {
     } else {
         Message.findOne({hash: req.body.message}, (messageError, messageData) => {
             if(messageError){
+                console.log(messageError)
                 return res.status(500).json('error')
             } else if(messageData){
                 let user = !req.body.key || typeof(req.body.key) !== 'string' ? 'anon' : new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')
