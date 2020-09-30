@@ -4,7 +4,7 @@ const EC = require('elliptic').ec
 const MD5 = require('md5')
 
 router.get('/hash/:hash', (req, res) => {
-    Message.findOne({hash: req.params.hash}, (error, data) => {
+    Message.findOne({hash: req.params.hash.toLowerCase()}, (error, data) => {
         if(error){
             console.log(error)
             return res.status(500).json('error')
