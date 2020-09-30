@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const User = require('../models/user.js')
-const Message = require('../models/message.js')
+const DataHash = require('../models/datahash.js')
 const EC = require('elliptic').ec
 const MD5 = require('md5')
 
@@ -59,14 +59,14 @@ router.get('/following/:address/:page/:limit', (req, res) => {
             } else if(!userData){
                 return res.status(400).json('error')
             } else if(userData){
-                Message.paginate({address: {$in: userData.following}}, {page, limit}, (messageError, messageData) => {
-                    if(messageError){
-                        console.log(messageError)
+                DataHash.paginate({address: {$in: userData.following}}, {page, limit}, (hashError, hashData) => {
+                    if(hashError){
+                        console.log(hashError)
                         return res.status(500).json('error')
-                    } else if(!messageData){
+                    } else if(!hashData){
                         return res.status(400).json('error')
-                    } else if(messageData){
-                        return res.status(200).json(messageData)
+                    } else if(hashData){
+                        return res.status(200).json(hashData)
                     }
                 })
             }
@@ -87,14 +87,14 @@ router.get('/followers/:address/:page/:limit', (req, res) => {
             } else if(!userData){
                 return res.status(400).json('error')
             } else if(userData){
-                Message.paginate({address: {$in: userData.followers}}, {page, limit}, (messageError, messageData) => {
-                    if(messageError){
-                        console.log(messageError)
+                DataHash.paginate({address: {$in: userData.followers}}, {page, limit}, (hashError, hashData) => {
+                    if(hashError){
+                        console.log(hashError)
                         return res.status(500).json('error')
-                    } else if(!messageData){
+                    } else if(!hashData){
                         return res.status(400).json('error')
-                    } else if(messageData){
-                        return res.status(200).json(messageData)
+                    } else if(hashData){
+                        return res.status(200).json(hashData)
                     }
                 })
             }

@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/user.js')
-const messageRoutes = require('./routes/message.js')
+const hashRoutes = require('./routes/datahash.js')
 const commentRoutes = require('./routes/comment.js')
 const rateLimit = require("express-rate-limit")
 const MongoStore = require('rate-limit-mongo')
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/user', userRoutes)
-app.use('/message', messageRoutes)
+app.use('/datahash', hashRoutes)
 app.use('/comment', commentRoutes)
 
 app.get('*', (req, res) => {

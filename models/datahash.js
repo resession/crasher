@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
 
-const MessageSchema = new mongoose.Schema({
+const DataHashSchema = new mongoose.Schema({
     text: String,
     hash: String,
     user: String,
@@ -12,7 +12,7 @@ const MessageSchema = new mongoose.Schema({
     comments: Number,
     tags: Array
 })
-MessageSchema.plugin(mongoosePaginate)
-const Message = mongoose.model('Message', MessageSchema)
+DataHashSchema.plugin(mongoosePaginate)
+const DataHash = mongoose.model('DataHash', DataHashSchema)
 
-module.exports = Message
+module.exports = DataHash
