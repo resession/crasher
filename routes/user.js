@@ -3,8 +3,9 @@ const User = require('../models/user.js')
 const DataHash = require('../models/datahash.js')
 const EC = require('elliptic').ec
 const MD5 = require('md5')
+const {verifyRecaptcha} = require('../folder/data.js')
 
-router.get('/new', (req, res) => {
+router.get('/new', verifyRecaptcha, (req, res) => {
     let account = new EC('secp256k1').genKeyPair()
     User.create({address: account.getPublic('hex'), followers: [], following: []}, (error, userData) => {
         if(error){
