@@ -64,7 +64,7 @@ router.post('/hash/text',
         next()
     }
 },
-// verifyRecaptcha,
+verifyRecaptcha,
 (req, res) => {
     DataHash.findOne({hash: req.body.id}, (hashError, hashData) => {
         if(hashError){
