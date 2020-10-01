@@ -8,7 +8,7 @@ function verifyRecaptcha(req, res, next){
         return res.status(400).json('error')
     } else {
         axios.post('https://www.google.com/recaptcha/api/siteverify', {}, {params: {secret: secretKey, response: req.body.token}}).then(data => {
-            if(!data.success || !data.score){
+            if(!data.success || data.score < 0.1){
                 return res.status(400).json('error')
             } else {
                 next()
