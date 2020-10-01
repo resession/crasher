@@ -79,7 +79,7 @@ verifyRecaptcha,
                 } else if(commentData){
                     hashData.comments = hashData.comments + 1
                     hashData.save()
-                    return res.status(200).json(commentData)
+                    return res.status(200).json(hashData)
                 } else if(!commentData){
                     return res.status(400).json('error')
                 }
