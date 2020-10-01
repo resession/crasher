@@ -5,14 +5,36 @@ const EC = require('elliptic').ec
 const MD5 = require('md5')
 const {verifyRecaptcha} = require('../folder/data.js')
 
-router.get('/new', verifyRecaptcha, (req, res) => {
+router.post('/register', verifyRecaptcha, (req, res) => {
     let account = new EC('secp256k1').genKeyPair()
     User.create({address: account.getPublic('hex'), followers: [], following: []}, (error, userData) => {
         if(error){
             console.log(error)
-            return res.status(400).json('error')
+            return res.status(500).json('error')
         } else if(userData){
             return res.status(200).json({key: account.getPrivate('hex'), message: 'SAVE THE KEY, IF YOU LOSE THE KEY, YOU CAN NOT LOG BACK IN', user: userData})
+        }
+    })
+})
+
+router.post('/login',
+(req, res, next) => {
+    if(!req.body.key || typeof(req.body.key) !== 'string'){
+        return res.status(400).json('error')
+    } else {
+        next()
+    }
+},
+verifyRecaptcha,
+(req, res) => {
+    User.findOne({address: new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')}, (error, userData) => {
+        if(error){
+            console.log(error)
+            return res.status(500).json('error')
+        } else if(userData){
+            return res.status(200).json(true)
+        } else if(!userData){
+            return res.status(400).json(false)
         }
     })
 })
