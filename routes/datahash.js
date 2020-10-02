@@ -41,6 +41,8 @@ router.post('/submit',
 verifyRecaptcha,
 (req, res) => {
     DataHash.findOne({hash: MD5(req.body.text)}, (foundError, found) => {
+        let user = !req.body.key || typeof(req.body.key) !== 'string' ? 'anon' : new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')
+        let tags = !req.body.tags || typeof(req.body.tags) !== 'string' || req.body.tags.length > 100 ? [] : req.body.tags.split(',')
         if(foundError){
             console.log(foundError)
             return res.status(500).json('error')
@@ -48,11 +50,10 @@ verifyRecaptcha,
             found.popular = Date.now() - found.updated
             found.updated = Date.now()
             found.posted = found.posted + 1
+            found.tags = tags
             found.save()
             return res.status(200).json(found)
         } else if(!found){
-            let user = !req.body.key || typeof(req.body.key) !== 'string' ? 'anon' : new EC('secp256k1').keyFromPrivate(req.body.key).getPublic('hex')
-            let tags = !req.body.tags || typeof(req.body.tags) !== 'string' || req.body.tags.length > 100 ? [] : req.body.tags.split(',')
             DataHash.create({tags, updated: Date.now(), popular: Date.now(), posted: 0, comments: 0, user, text: req.body.text, hash: MD5(req.body.text), created: Date.now()}, (createdError, created) => {
                 if(createdError){
                     console.log(createdError)
